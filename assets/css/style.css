@@ -10,8 +10,6 @@
     background-color: rgb(58, 58, 161);
     color: white;
     margin-left: 20px;
-}
-
-#hide {
-    display: none;
+    margin-bottom: 20px;
+    padding: 10px;
 }
