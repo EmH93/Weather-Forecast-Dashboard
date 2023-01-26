@@ -12,7 +12,7 @@
     let searchHistory = [];
 
 //Creating variables for todays date and the next 5 days to appear on screen.
-    let todayDate = moment().format('L'); 
+    let todayDate = $("<h4>").text(moment().format('L')); 
     let tomorrowDateOne = moment().add(1, 'days').format('LL');
     let tomorrowDateTwo = moment().add(2, 'days').format('LL');
     let tomorrowDateThree = moment().add(3, 'days').format('LL');
@@ -38,17 +38,28 @@
             var APIKey = "accbe8c22666b428c502d933a37222a8";
             var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + userInput + "&appid=" + APIKey + "&cnt=6&units=metric";
 
+        //ajax get method and following reponse html formatting
             $.ajax({
                 url: queryURL,
                 method: "GET"
             }).then(function(response){
                 console.log(response)
                 var cityName = $("<h1>").text(response.city.name);
+                var iconcode = response.list[0].weather[0].icon;
+                var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
+                var weatherIcon = $("<img>").attr("src", iconurl);
                 var cityTemp = $("<h4>").text("Temp: "+ response.list[0].main.temp + "°C");
-                var cityWind = $("<h4>").text("Wind: " + response.list[0].wind.speed + "KPH");
+                var cityWind = $("<h4>").text("Wind: " + response.list[0].wind.speed + " kph");
                 var cityHumidity = $("<h4>").text("Humidity: " + response.list[0].main.humidity + "%");
-                weatherToday.append(cityName, cityTemp, cityWind, cityHumidity);
+                weatherToday.append(cityName, todayDate, weatherIcon, cityTemp, cityWind, cityHumidity);
             
+            var listArr = response.list;
+
+            for (var i = 0; i < listArr; i++){
+                if(listArr[i] > listArr[0]){
+
+                }
+            }
 
             })
         }
