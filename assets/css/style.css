@@ -1,2 +1,6 @@
 /*Possibly need to create code that adapts the css to screen sizes - possibly. Search div is set up for wide screens*/
 
+#todayForecast {
+    border: 2px solid black;
+}
+

@@ -22,11 +22,13 @@
     searchBtn.on("click", function(event){
         event.preventDefault();
         var userInput = searchVal.val().trim();
+        
     //if else statement to validate user input - no empty searches allowed
     if(userInput === ""){
         alert("Enter a place name, then click search to continue.");
     } else { 
 
+    //Push user input to search history in local storage
         searchHistory.push(userInput);
         JSON.stringify(searchHistory);
         localStorage.setItem("History", searchHistory);
