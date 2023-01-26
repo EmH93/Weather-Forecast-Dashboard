@@ -7,6 +7,7 @@
 //Grabbing search value input and search button as variables
     let searchVal = $("#search-input");
     let searchBtn = $("#search-button");
+    let weatherToday = $("#today");
 //Variable for empty search history array
     let searchHistory = [];
 
@@ -22,7 +23,7 @@
     searchBtn.on("click", function(event){
         event.preventDefault();
         var userInput = searchVal.val().trim();
-        
+
     //if else statement to validate user input - no empty searches allowed
     if(userInput === ""){
         alert("Enter a place name, then click search to continue.");
@@ -41,7 +42,16 @@
                 url: queryURL,
                 method: "GET"
             }).then(function(response){
-                console.log(response);
+                console.log(response)
+                var cityName = $("<h1>").text(response.city.name);
+                var cityTemp = $("<h4>").text("Temp: "+ response.list[0].main.temp + "°C");
+                var cityWind = $("<h4>").text("Wind: " + response.list[0].wind.speed + "KPH");
+                var cityHumidity = $("<h4>").text("Humidity: " + response.list[0].main.humidity + "%");
+                weatherToday.append(cityName, cityTemp, cityWind, cityHumidity);
+            
+
             })
         }
     })
+
+    
