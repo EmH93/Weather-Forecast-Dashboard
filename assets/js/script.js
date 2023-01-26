@@ -8,6 +8,15 @@
     let searchVal = $("#search-input");
     let searchBtn = $("#search-button");
 
+//QueryUrl and API key for OpenWeather API
+let userInput 
+var APIKey = "accbe8c22666b428c502d933a37222a8";
+
+var weatherQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + userInput + "&appid=" + APIKey + "&cnt=6&units=metric";
+
+console.log(weatherQueryURL);
+
+
 //Creating variables for todays date and the next 5 days to appear on screen.
     let todayDate = moment().format('L'); 
     let tomorrowDateOne = moment().add(1, 'days').format('LL');
