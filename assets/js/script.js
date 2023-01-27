@@ -32,19 +32,14 @@ $(document).ready(function () {
 
 //Render prev search buttons to screen
     function renderButtons(){
-        //let prevSearch = localStorage.getItem("History");
-        //let prevSearchArr = JSON.parse(prevSearch);
-
-        let prevSearchArr = ["Swindon", "London", "Bristol", "Chippenham"];
-
-        for (let i = 0; i < prevSearchArr.length; i++){
-            let newBtn = $("<button>");
-            newBtn.text(prevSearchArr[i]);
-            $("#history").append(newBtn);
-          }
-        
-
-    }
+        let prevSearch = localStorage.getItem("History");
+        let prevSearchArr = prevSearch.split(',');
+            for (let i = 0; i < prevSearchArr.length; i++){
+                let newBtn = $("<button>");
+                newBtn.text(prevSearchArr[i]);
+                $("#history").append(newBtn);
+            }
+        }
 
 
 
