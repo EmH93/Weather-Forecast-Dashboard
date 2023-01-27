@@ -1,9 +1,3 @@
-//Create empty array for history in local storage - push this array into history buttons on right hand side of page.
-//On page load, render localstorage array as buttons on right-hand side, if local storage is empty load nothing.
-//Create on click listener for search button that takes user input - validates it and sends it to weather api and pushes results to page.
-//Possibly use same query url to load in 5 day forecast.
-//ensure forecasts load relevant data - pushed to html as well as an icon.
-
 //Grabbing variables from html
     let searchVal = $("#search-input");
     let searchBtn = $("#search-button");
@@ -13,14 +7,17 @@
     let searchHistory = [];
 
 //Creating variables for todays date and the next 5 days to appear on screen.
-    let todayDate = $("<h4>").text(moment().format('LL'));    
+    let todayDate = $("<h4>").text(moment().format('DD/MM/YYYY'));    
 
 
 //Document ready function
     $(document).ready(function () {
 
+
+
 //Render previous search entries on page load 
     renderButtons();
+
 
 //onclick event for search button
     searchBtn.on("click", function(event){
@@ -33,20 +30,41 @@
     //Push new search to button list
        let newSearchBtn = $("<button>");
        newSearchBtn.text(userInput);
-       newSearchBtn.attr("class", "searchBtn");
+       newSearchBtn.attr("class", "newSearchBtn");
        newSearchBtn.attr("data-place", userInput);
        $("#history").append(newSearchBtn);
     //clear content on main page when new search is input
         weatherToday.empty();
         forecastDiv.empty();
+    //Push user input to search history in local storage
+        searchHistory.push(userInput);
+        JSON.stringify(searchHistory);
+        localStorage.setItem("History", searchHistory);
     //Running function for user input to screen
         userSearch(userInput);
+
+        let newHistoryBtns = $(".newSearchBtn");
+        newHistoryBtns.on("click", function(){
+         //clear content on main page when new search is input
+                weatherToday.empty();
+                forecastDiv.empty();
+        // Pull place name from button's content
+            var prevBtn = $(this).attr("data-place");
+            searchHistory.push(prevBtn);
+            JSON.stringify(searchHistory);
+            localStorage.setItem("History", searchHistory);
+            userSearch(prevBtn);
+        })
     }
 })
+
+
 
 //Render prev search buttons to screen
     function renderButtons(){
         let prevSearch = localStorage.getItem("History");
+//if else parameters for if the users search history is empty
+        if (prevSearch) {
         let prevSearchArr = prevSearch.split(',');
             for (let i = 0; i < prevSearchArr.length; i++){
                 let newBtn = $("<button>");
@@ -55,23 +73,31 @@
                 newBtn.attr("data-place", prevSearchArr[i]);
                 $("#history").append(newBtn);
             }
+        } else {
+            return;
         }
+    }
+
+
 
 //search using history buttons - on click
-    let historyBtns = $("#history");
+    let historyBtns = $(".searchBtn");
     historyBtns.on("click", function(){
+     //clear content on main page when new search is input
+            weatherToday.empty();
+            forecastDiv.empty();
+    // Pull place name from button's content
         var prevBtn = $(this).attr("data-place");
-        console.log(prevBtn);
+        searchHistory.push(prevBtn);
+        JSON.stringify(searchHistory);
+        localStorage.setItem("History", searchHistory);
+        userSearch(prevBtn);
     })
 
 
 
 //function for query to API and pushing to screen.
     function userSearch (userInput){
-    //Push user input to search history in local storage
-        searchHistory.push(userInput);
-        JSON.stringify(searchHistory);
-        localStorage.setItem("History", searchHistory);
     //QueryUrl and API key for OpenWeather API
             var APIKey = "accbe8c22666b428c502d933a37222a8";
             var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + userInput + "&appid=" + APIKey + "&cnt=6&units=metric";
@@ -95,15 +121,14 @@
                     } else {
                         let weatherDiv = $("<div>").attr("id", "futureForecast");
                         weatherDiv.attr("data-number", [i]);
-                        var cityNameSml = $("<h4>").text(response.city.name);
-                        let tomorrowDate = $("<h6>").text(moment().add([i], 'days').format('LL'));
+                        let tomorrowDate = $("<h6>").text(moment().add([i], 'days').format('DD/MM/YYYY'));
                         var iconcodeSml = response.list[i].weather[0].icon;
                         var iconurlSml = "http://openweathermap.org/img/w/" + iconcodeSml + ".png";
                         var weatherIconSml = $("<img>").attr("src", iconurlSml);
                         var cityTempSml = $("<h4>").text("Temp: "+ response.list[i].main.temp + "°C");
                         var cityWindSml = $("<h4>").text("Wind: " + response.list[i].wind.speed + " kph");
                         var cityHumiditySml = $("<h4>").text("Humidity: " + response.list[i].main.humidity + "%");
-                        weatherDiv.append(cityNameSml, tomorrowDate, weatherIconSml, cityTempSml, cityWindSml, cityHumiditySml);
+                        weatherDiv.append(tomorrowDate, weatherIconSml, cityTempSml, cityWindSml, cityHumiditySml);
                         forecastDiv.append(weatherDiv);
                     }} 
             })
