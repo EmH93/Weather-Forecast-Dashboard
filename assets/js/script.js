@@ -42,42 +42,45 @@
         localStorage.setItem("History", searchHistory);
     //Running function for user input to screen
         userSearch(userInput);
-
+        }
+    
+    //creating new historical search buttons for new input
         let newHistoryBtns = $(".newSearchBtn");
         newHistoryBtns.on("click", function(){
-         //clear content on main page when new search is input
                 weatherToday.empty();
                 forecastDiv.empty();
-        // Pull place name from button's content
             var prevBtn = $(this).attr("data-place");
             searchHistory.push(prevBtn);
             JSON.stringify(searchHistory);
             localStorage.setItem("History", searchHistory);
             userSearch(prevBtn);
-        })
-    }
-})
-
-
+            })
+         })
+  
 
 //Render prev search buttons to screen
     function renderButtons(){
         let prevSearch = localStorage.getItem("History");
-//if else parameters for if the users search history is empty
+    //if else parameters for if the users search history is empty
         if (prevSearch) {
-        let prevSearchArr = prevSearch.split(',');
-            for (let i = 0; i < prevSearchArr.length; i++){
-                let newBtn = $("<button>");
-                newBtn.text(prevSearchArr[i]);
-                newBtn.attr("class", "searchBtn");
-                newBtn.attr("data-place", prevSearchArr[i]);
-                $("#history").append(newBtn);
-            }
-        } else {
-            return;
-        }
-    }
-
+            let prevSearchArr = prevSearch.split(',');
+        //Function that ensures only unique names are pushed to the screen
+            var uniqueSearch = prevSearchArr.reduce(function(a,b){
+                if (a.indexOf(b) < 0 ) a.push(b);
+                return a;
+              },[]);
+        //create buttons for search history
+                for (let i = 0; i < uniqueSearch.length; i++){
+                    let newBtn = $("<button>");
+                    newBtn.text(prevSearchArr[i]);
+                    newBtn.attr("class", "searchBtn");
+                    newBtn.attr("data-place", prevSearchArr[i]);
+                    $("#history").append(newBtn);
+                }
+                } else {
+                        return;
+                    }
+                }
 
 
 //search using history buttons - on click
@@ -93,7 +96,6 @@
         localStorage.setItem("History", searchHistory);
         userSearch(prevBtn);
     })
-
 
 
 //function for query to API and pushing to screen.
