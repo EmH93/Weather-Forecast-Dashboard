@@ -2,14 +2,53 @@
 
 #todayForecast {
     border: 2px solid black;
+    border-radius: 20px;
     padding: 20px;
 }
 
 #futureForecast {
     border: 2px solid black;
     background-color: rgb(58, 58, 161);
+    border-radius: 20px;
     color: white;
     margin-left: 20px;
     margin-bottom: 20px;
+    padding: 10px;
+}
+
+#search-button {
+    background-color: rgb(151, 151, 243);
+    border: 2px solid rgb(58, 58, 161);
+    border-radius: 0px 10px 10px 0px;
+}
+
+#search-button:hover {
+    background-color: rgb(206, 206, 206);
+    border: 2px solid rgb(104, 104, 104);
+    border-radius: 0px 10px 10px 0px;
+}
+
+#history {
+    padding: 10px;
+}
+
+.searchBtn {
+    margin: 10px;
+    padding: 5px;
+    border-radius: 10px;
+    border: 2px solid rgb(160, 160, 160);
+}
+
+.searchBtn:hover {
+    border: 2px solid rgb(58, 58, 161);
+    background-color: rgb(151, 151, 243);
+}
+
+aside {
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.form {
     padding: 10px;
 }

@@ -37,6 +37,7 @@ $(document).ready(function () {
             for (let i = 0; i < prevSearchArr.length; i++){
                 let newBtn = $("<button>");
                 newBtn.text(prevSearchArr[i]);
+                newBtn.attr("class", "searchBtn");
                 $("#history").append(newBtn);
             }
         }
@@ -54,6 +55,11 @@ $(document).ready(function () {
         searchHistory.push(userInput);
         JSON.stringify(searchHistory);
         localStorage.setItem("History", searchHistory);
+    //Push new search to button list
+            let newSearchBtn = $("<button>");
+            newSearchBtn.text(userInput);
+            newSearchBtn.attr("class", "searchBtn");
+            $("#history").append(newSearchBtn);
 
     //QueryUrl and API key for OpenWeather API
             var APIKey = "accbe8c22666b428c502d933a37222a8";
