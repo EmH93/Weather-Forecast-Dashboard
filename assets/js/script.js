@@ -15,20 +15,34 @@
 //Creating variables for todays date and the next 5 days to appear on screen.
     let todayDate = $("<h4>").text(moment().format('LL'));    
 
-$(document).ready(function () {
 
+//Document ready function
+    $(document).ready(function () {
+
+//Render previous search entries on page load 
     renderButtons();
 
 //onclick event for search button
     searchBtn.on("click", function(event){
         event.preventDefault();
         var userInput = searchVal.val().trim();
+    //if else statement to validate user input - no empty searches allowed
+        if(userInput === ""){
+            alert("Enter a place name, then click search to continue.");
+        } else { 
+    //Push new search to button list
+       let newSearchBtn = $("<button>");
+       newSearchBtn.text(userInput);
+       newSearchBtn.attr("class", "searchBtn");
+       newSearchBtn.attr("data-place", userInput);
+       $("#history").append(newSearchBtn);
     //clear content on main page when new search is input
         weatherToday.empty();
         forecastDiv.empty();
     //Running function for user input to screen
         userSearch(userInput);
-    })
+    }
+})
 
 //Render prev search buttons to screen
     function renderButtons(){
@@ -38,33 +52,29 @@ $(document).ready(function () {
                 let newBtn = $("<button>");
                 newBtn.text(prevSearchArr[i]);
                 newBtn.attr("class", "searchBtn");
+                newBtn.attr("data-place", prevSearchArr[i]);
                 $("#history").append(newBtn);
             }
         }
+
+//search using history buttons - on click
+    let historyBtns = $("#history");
+    historyBtns.on("click", function(){
+        var prevBtn = $(this).attr("data-place");
+        console.log(prevBtn);
+    })
 
 
 
 //function for query to API and pushing to screen.
     function userSearch (userInput){
-    //if else statement to validate user input - no empty searches allowed
-        if(userInput === ""){
-            alert("Enter a place name, then click search to continue.");
-        } else { 
-
     //Push user input to search history in local storage
         searchHistory.push(userInput);
         JSON.stringify(searchHistory);
         localStorage.setItem("History", searchHistory);
-    //Push new search to button list
-            let newSearchBtn = $("<button>");
-            newSearchBtn.text(userInput);
-            newSearchBtn.attr("class", "searchBtn");
-            $("#history").append(newSearchBtn);
-
     //QueryUrl and API key for OpenWeather API
             var APIKey = "accbe8c22666b428c502d933a37222a8";
             var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + userInput + "&appid=" + APIKey + "&cnt=6&units=metric";
-
         //ajax get method and following reponse html formatting
             $.ajax({
                 url: queryURL,
@@ -96,13 +106,7 @@ $(document).ready(function () {
                         weatherDiv.append(cityNameSml, tomorrowDate, weatherIconSml, cityTempSml, cityWindSml, cityHumiditySml);
                         forecastDiv.append(weatherDiv);
                     }} 
-
-
-
             })
         }
-    }
+    })
 
-    
-
-})
