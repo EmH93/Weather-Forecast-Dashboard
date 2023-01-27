@@ -13,12 +13,11 @@
     let searchHistory = [];
 
 //Creating variables for todays date and the next 5 days to appear on screen.
-    let todayDate = $("<h4>").text(moment().format('L')); 
-    let tomorrowDateOne = $("<h6>").text(moment().add(1, 'days').format('LL'));
-    let tomorrowDateTwo = $("<h6>").text(moment().add(2, 'days').format('LL'));
-    let tomorrowDateThree = $("<h6>").text(moment().add(3, 'days').format('LL'));
-    let tomorrowDateFour = $("<h6>").text(moment().add(4, 'days').format('LL'));
-    let tomorrowDateFive = $("<h6>").text(moment().add(5, 'days').format('LL'));
+    let todayDate = $("<h4>").text(moment().format('LL'));    
+
+$(document).ready(function () {
+
+    renderButtons();
 
 //onclick event for search button
     searchBtn.on("click", function(event){
@@ -27,9 +26,26 @@
     //clear content on main page when new search is input
         weatherToday.empty();
         forecastDiv.empty();
-
+    //Running function for user input to screen
         userSearch(userInput);
     })
+
+//Render prev search buttons to screen
+    function renderButtons(){
+        //let prevSearch = localStorage.getItem("History");
+        //let prevSearchArr = JSON.parse(prevSearch);
+
+        let prevSearchArr = ["Swindon", "London", "Bristol", "Chippenham"];
+
+        for (let i = 0; i < prevSearchArr.length; i++){
+            let newBtn = $("<button>");
+            newBtn.text(prevSearchArr[i]);
+            $("#history").append(newBtn);
+          }
+        
+
+    }
+
 
 
 //function for query to API and pushing to screen.
@@ -69,15 +85,23 @@
                         let weatherDiv = $("<div>").attr("id", "futureForecast");
                         weatherDiv.attr("data-number", [i]);
                         var cityNameSml = $("<h4>").text(response.city.name);
+                        let tomorrowDate = $("<h6>").text(moment().add([i], 'days').format('LL'));
                         var iconcodeSml = response.list[i].weather[0].icon;
                         var iconurlSml = "http://openweathermap.org/img/w/" + iconcodeSml + ".png";
                         var weatherIconSml = $("<img>").attr("src", iconurlSml);
                         var cityTempSml = $("<h4>").text("Temp: "+ response.list[i].main.temp + "°C");
                         var cityWindSml = $("<h4>").text("Wind: " + response.list[i].wind.speed + " kph");
                         var cityHumiditySml = $("<h4>").text("Humidity: " + response.list[i].main.humidity + "%");
-                        weatherDiv.append(cityNameSml, weatherIconSml, cityTempSml, cityWindSml, cityHumiditySml);
+                        weatherDiv.append(cityNameSml, tomorrowDate, weatherIconSml, cityTempSml, cityWindSml, cityHumiditySml);
                         forecastDiv.append(weatherDiv);
                     }} 
+
+
+
             })
         }
     }
+
+    
+
+})
